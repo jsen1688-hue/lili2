@@ -214,6 +214,52 @@
     }
     #successMsg h2 { font-size: 1.4rem; margin-bottom: 8px; }
 
+    /* Radio button cards (職務 / 班別) */
+    .rb-btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .rb-btn {
+      padding: 8px 16px;
+      border: 1.5px solid #d0c0e8;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.93rem;
+      background: #fff;
+      color: #555;
+      user-select: none;
+      transition: all .15s;
+    }
+    .rb-btn input[type="radio"] { display: none; }
+    .rb-btn:has(input[type="radio"]:checked) {
+      background: #8e44ad;
+      border-color: #8e44ad;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* Status block (妊娠 / 分娩後) */
+    .status-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 14px;
+      background: #fdf8ff;
+      border: 1.5px solid #e8d5f5;
+      border-radius: 8px;
+    }
+    .status-radio-label {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #6c3483;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .status-radio-label input[type="radio"] {
+      width: 17px; height: 17px;
+      accent-color: #8e44ad;
+      cursor: pointer;
+    }
+
     /* Inline text */
     .inline { display: inline; }
     .text-hint { font-size: 0.8rem; color: #999; margin-left: 4px; }
@@ -225,13 +271,7 @@
   <!-- Header -->
   <div class="header-card">
     <h1>建昇科技有限公司<br><span style="font-size:1.2rem;">妊娠及分娩後未滿一年員工之健康情形自我評估表</span></h1>
-    <div class="site-row">
-      <div class="site-field">
-        <label>站名：</label>
-        <input type="text" class="uf-input md" id="site" placeholder="請輸入">
-      </div>
-      <span class="site-note">（員工本人填寫，可參閱孕婦健康手冊）</span>
-    </div>
+    <div style="text-align:right;font-size:0.8rem;color:#888;margin-top:8px">（員工本人填寫，可參閱孕婦健康手冊）</div>
   </div>
 
   <form id="mainForm" novalidate>
@@ -241,55 +281,82 @@
       <div class="section-title">一、基本資料</div>
       <div class="section-body">
 
-        <!-- 姓名/年齡/職務/班別 -->
+        <!-- 站名 -->
         <div class="form-row">
-          <label>姓名：</label><input type="text" class="uf-input md" id="uname" placeholder="請輸入" required>
-          <label>年齡：</label><input type="number" id="age" min="15" max="60" style="width:50px"> 歲
-          <label>職務：</label><input type="text" class="uf-input md" id="job" placeholder="請輸入">
-          <label>目前班別：</label><input type="text" class="uf-input sm" id="shift" placeholder="請輸入">
+          <label>站名：</label><input type="text" class="uf-input md" id="site" placeholder="請輸入" required>
         </div>
 
         <div class="divider"></div>
 
-        <!-- 狀態：妊娠 / 分娩後 -->
-        <div>
-          <div class="check-group">
-            <label class="rb-item"><input type="radio" name="status" value="妊娠" id="statusPreg"> 妊娠</label>
-            <label class="rb-item"><input type="radio" name="status" value="分娩後" id="statusPost"> 分娩後</label>
-          </div>
+        <!-- 姓名/年齡 -->
+        <div class="form-row">
+          <label>姓名：</label><input type="text" class="uf-input md" id="uname" placeholder="請輸入" required>
+          <label>年齡：</label><input type="number" id="age" min="15" max="60" style="width:50px"> 歲
+        </div>
 
-          <!-- 妊娠詳細 -->
-          <div class="sub-block hidden" id="pregBlock" style="margin-top:10px">
-            <div class="form-row">
-              <label>妊娠週數：</label>
-              <input type="number" id="pregWeeks" min="1" max="42" style="width:50px"> 週
-              <label style="margin-left:12px">預產期：</label>
-              <div class="date-group">
-                <input type="number" class="y uf-input" id="dueY" placeholder="年" min="2024" max="2030">年
-                <input type="number" class="uf-input sm" id="dueM" placeholder="月" min="1" max="12">月
-                <input type="number" class="uf-input sm" id="dueD" placeholder="日" min="1" max="31">日
-              </div>
-            </div>
-            <div class="form-row">
-              <label>本次妊娠有無多胎：</label>
-              <label class="rb-item"><input type="radio" name="multiPre" value="無"> 無</label>
-              <label class="rb-item"><input type="radio" name="multiPre" value="有"> 有</label>
+        <div class="divider"></div>
+
+        <!-- 職務 -->
+        <div class="form-row" style="align-items:flex-start">
+          <label style="padding-top:10px">職務：</label>
+          <div class="rb-btn-group">
+            <label class="rb-btn"><input type="radio" name="job" value="加油員"> 加油員</label>
+            <label class="rb-btn"><input type="radio" name="job" value="洗車人員"> 洗車人員</label>
+            <label class="rb-btn"><input type="radio" name="job" value="咖啡銷售人員"> 咖啡銷售人員</label>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 目前班別 -->
+        <div class="form-row" style="align-items:flex-start">
+          <label style="padding-top:10px">目前班別：</label>
+          <div class="rb-btn-group">
+            <label class="rb-btn"><input type="radio" name="shift" value="早"> 早</label>
+            <label class="rb-btn"><input type="radio" name="shift" value="中"> 中</label>
+            <label class="rb-btn"><input type="radio" name="shift" value="晚"> 晚</label>
+            <label class="rb-btn"><input type="radio" name="shift" value="需配合輪班"> 需配合輪班</label>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 狀態：妊娠 -->
+        <div class="status-block">
+          <div class="form-row" style="flex-wrap:wrap;gap:10px 16px">
+            <label class="status-radio-label">
+              <input type="radio" name="status" value="妊娠" id="statusPreg"> 妊娠
+            </label>
+            <label>妊娠週數：</label>
+            <input type="number" id="pregWeeks" min="1" max="42" style="width:50px"> 週；
+            <label>預產期：</label>
+            <div class="date-group">
+              <input type="number" class="y uf-input" id="dueY" placeholder="年" min="2024" max="2030">年
+              <input type="number" class="uf-input sm" id="dueM" placeholder="月" min="1" max="12">月
+              <input type="number" class="uf-input sm" id="dueD" placeholder="日" min="1" max="31">日
             </div>
           </div>
+          <div class="form-row" style="padding-left:4px">
+            <label>本次妊娠有無多胎：</label>
+            <label class="rb-item"><input type="radio" name="multiPre" value="無"> 無</label>
+            <label class="rb-item"><input type="radio" name="multiPre" value="有"> 有</label>
+          </div>
+        </div>
 
-          <!-- 分娩後詳細 -->
-          <div class="sub-block hidden" id="postBlock" style="margin-top:10px">
-            <div class="form-row">
-              <label>分娩日期：</label>
-              <div class="date-group">
-                <input type="number" class="y uf-input" id="birthY" placeholder="年" min="2024" max="2030">年
-                <input type="number" class="uf-input sm" id="birthM" placeholder="月" min="1" max="12">月
-                <input type="number" class="uf-input sm" id="birthD" placeholder="日" min="1" max="31">日
-              </div>
-              <label style="margin-left:12px">哺乳：</label>
-              <label class="rb-item"><input type="radio" name="breastfeed" value="哺乳"> 哺乳</label>
-              <label class="rb-item"><input type="radio" name="breastfeed" value="未哺乳"> 未哺乳</label>
-            </div>
+        <!-- 狀態：分娩後 -->
+        <div class="status-block">
+          <div class="form-row" style="flex-wrap:wrap;gap:10px 16px">
+            <label class="status-radio-label">
+              <input type="radio" name="status" value="分娩後" id="statusPost"> 分娩後
+            </label>
+            <label>分娩日期：</label>
+            <div class="date-group">
+              <input type="number" class="y uf-input" id="birthY" placeholder="年" min="2024" max="2030">年
+              <input type="number" class="uf-input sm" id="birthM" placeholder="月" min="1" max="12">月
+              <input type="number" class="uf-input sm" id="birthD" placeholder="日" min="1" max="31">日
+            </div>；
+            <label class="rb-item"><input type="radio" name="breastfeed" value="哺乳"> 哺乳</label>
+            <label class="rb-item"><input type="radio" name="breastfeed" value="未哺乳"> 未哺乳</label>
           </div>
         </div>
       </div>
@@ -536,14 +603,6 @@
 </div>
 
 <script>
-  // 狀態切換：妊娠 / 分娩後
-  document.querySelectorAll('input[name="status"]').forEach(function(r) {
-    r.addEventListener('change', function() {
-      document.getElementById('pregBlock').classList.toggle('hidden', this.value !== '妊娠');
-      document.getElementById('postBlock').classList.toggle('hidden', this.value !== '分娩後');
-    });
-  });
-
   // 第一胎免填 toggle
   document.getElementById('firstBabyDeliv').addEventListener('change', function() {
     document.getElementById('delivBlock').classList.toggle('hidden', this.checked);
@@ -573,8 +632,8 @@
       site: document.getElementById('site').value.trim(),
       name: document.getElementById('uname').value.trim(),
       age: document.getElementById('age').value,
-      job: document.getElementById('job').value,
-      shift: document.getElementById('shift').value,
+      job: getRadio('job'),
+      shift: getRadio('shift'),
       status: getRadio('status'),
       pregWeeks: document.getElementById('pregWeeks').value,
       dueDate: document.getElementById('dueY').value + '/' + document.getElementById('dueM').value + '/' + document.getElementById('dueD').value,
@@ -603,52 +662,33 @@
       submitTime: new Date().toLocaleString('zh-TW')
     };
 
-    var SHEET_URL = 'https://script.google.com/macros/s/AKfycbznTU2qlpY0_kJIWII7EXP-G2OQCRmzXByjrXegUD89-Vyn9j_iUJAShfytKq9ft1L-8w/exec';
+    var SHEET_URL = 'https://script.google.com/macros/s/AKfycbwrqtJdVGtPLgUGx1nwmNUMGWHJF-Pu1ZCOos07r-3zU3i5Zu9i7XEFw9UgAiTOO1f5Cw/exec';
 
     var statusEl = document.getElementById('sendStatus');
     statusEl.style.display = 'block';
     statusEl.className = 'send-status sending';
     statusEl.textContent = '⏳ 資料傳送中...';
 
-    // 使用隱藏 iframe + form POST，最可靠的跨域送出方式
-    var iframeId = 'hidden_iframe_' + Date.now();
-    var iframe = document.createElement('iframe');
-    iframe.name = iframeId;
-    iframe.id = iframeId;
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    var formData = new URLSearchParams();
+    Object.keys(payload).forEach(function(key) { formData.append(key, payload[key]); });
 
-    var hiddenForm = document.createElement('form');
-    hiddenForm.method = 'POST';
-    hiddenForm.action = SHEET_URL;
-    hiddenForm.target = iframeId;
-    hiddenForm.style.display = 'none';
-
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'data';
-    input.value = JSON.stringify(payload);
-    hiddenForm.appendChild(input);
-    document.body.appendChild(hiddenForm);
-
-    iframe.onload = function() {
-      statusEl.className = 'send-status ok';
-      statusEl.textContent = '✅ 資料已成功寫入 Google Sheets！';
-      document.getElementById('mainForm').style.display = 'none';
-      document.getElementById('successMsg').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      document.body.removeChild(hiddenForm);
-      setTimeout(function(){ document.body.removeChild(iframe); }, 2000);
-    };
-
-    hiddenForm.submit();
+    fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: formData })
+      .then(function() {
+        statusEl.className = 'send-status ok';
+        statusEl.textContent = '✅ 資料已成功寫入 Google Sheets！';
+        document.getElementById('mainForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(function(err) {
+        statusEl.className = 'send-status err';
+        statusEl.textContent = '⚠️ 傳送失敗，請通知管理員。';
+      });
   });
 
   function clearAll() {
     if (confirm('確定清除所有填答內容？')) {
       document.getElementById('mainForm').reset();
-      document.getElementById('pregBlock').classList.add('hidden');
-      document.getElementById('postBlock').classList.add('hidden');
       document.getElementById('delivBlock').classList.remove('hidden');
       document.getElementById('histBlock').classList.remove('hidden');
       document.getElementById('sendStatus').style.display = 'none';
