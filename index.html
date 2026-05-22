@@ -671,8 +671,20 @@
     statusEl.className = 'send-status sending';
     statusEl.textContent = '⏳ 正在產生 PDF...';
 
+    // 確認函式庫是否載入
+    if (typeof html2canvas === 'undefined') {
+      statusEl.className = 'send-status err';
+      statusEl.textContent = '⚠️ 錯誤：html2canvas 未載入，請確認網路連線後重試。';
+      return;
+    }
+    if (typeof window.jspdf === 'undefined') {
+      statusEl.className = 'send-status err';
+      statusEl.textContent = '⚠️ 錯誤：jsPDF 未載入，請確認網路連線後重試。';
+      return;
+    }
+
     html2canvas(document.getElementById('mainForm'), {
-      scale: 1.5, useCORS: true, allowTaint: true, backgroundColor: '#f5f0f7'
+      scale: 1, useCORS: true, allowTaint: true, backgroundColor: '#f5f0f7'
     }).then(function(canvas) {
       statusEl.textContent = '⏳ 資料與 PDF 傳送中...';
 
@@ -714,7 +726,7 @@
     })
     .catch(function(err) {
       statusEl.className = 'send-status err';
-      statusEl.textContent = '⚠️ 傳送失敗，請通知管理員。';
+      statusEl.textContent = '⚠️ 錯誤：' + (err.message || err);
     });
   });
 
