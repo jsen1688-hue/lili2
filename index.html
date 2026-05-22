@@ -610,21 +610,38 @@
     statusEl.className = 'send-status sending';
     statusEl.textContent = '⏳ 資料傳送中...';
 
-    var fd = new FormData();
-    fd.append('data', JSON.stringify(payload));
+    // 使用隱藏 iframe + form POST，最可靠的跨域送出方式
+    var iframeId = 'hidden_iframe_' + Date.now();
+    var iframe = document.createElement('iframe');
+    iframe.name = iframeId;
+    iframe.id = iframeId;
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
 
-    fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: fd })
-      .then(function() {
-        statusEl.className = 'send-status ok';
-        statusEl.textContent = '✅ 資料已成功寫入 Google Sheets！';
-        document.getElementById('mainForm').style.display = 'none';
-        document.getElementById('successMsg').style.display = 'block';
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      })
-      .catch(function(err) {
-        statusEl.className = 'send-status err';
-        statusEl.textContent = '⚠️ 傳送失敗，請通知管理員。';
-      });
+    var hiddenForm = document.createElement('form');
+    hiddenForm.method = 'POST';
+    hiddenForm.action = SHEET_URL;
+    hiddenForm.target = iframeId;
+    hiddenForm.style.display = 'none';
+
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'data';
+    input.value = JSON.stringify(payload);
+    hiddenForm.appendChild(input);
+    document.body.appendChild(hiddenForm);
+
+    iframe.onload = function() {
+      statusEl.className = 'send-status ok';
+      statusEl.textContent = '✅ 資料已成功寫入 Google Sheets！';
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.body.removeChild(hiddenForm);
+      setTimeout(function(){ document.body.removeChild(iframe); }, 2000);
+    };
+
+    hiddenForm.submit();
   });
 
   function clearAll() {
