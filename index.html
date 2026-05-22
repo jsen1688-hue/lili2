@@ -674,17 +674,18 @@
     var formData = new URLSearchParams();
     Object.keys(payload).forEach(function(key) { formData.append(key, payload[key]); });
 
-    fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: formData })
-      .then(function() {
+    fetch(SHEET_URL, { method: 'POST', body: formData })
+      .then(function(res) { return res.text(); })
+      .then(function(text) {
         statusEl.className = 'send-status ok';
-        statusEl.textContent = '✅ 資料已送出！PDF 約 30 秒後出現於 Google Drive「問卷表單PDF」資料夾。';
+        statusEl.textContent = '✅ 資料已送出！PDF 約 30 秒後出現於 Google Drive「問卷表單PDF」資料夾。回應：' + text;
         document.getElementById('mainForm').style.display = 'none';
         document.getElementById('successMsg').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
       })
       .catch(function(err) {
         statusEl.className = 'send-status err';
-        statusEl.textContent = '⚠️ 傳送失敗，請通知管理員。';
+        statusEl.textContent = '⚠️ 傳送失敗：' + err.message;
       });
   });
 
