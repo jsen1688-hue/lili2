@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>妊娠及分娩後未滿一年員工之健康情形自我評估表</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', Arial, sans-serif;
+      background: #f5f0f7;
+      color: #222;
+      padding: 24px 16px 60px;
+    }
+    .page { max-width: 780px; margin: 0 auto; }
+
+    /* Header */
+    .header-card {
+      background: #fff;
+      border-radius: 12px;
+      border-top: 8px solid #8e44ad;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 26px 32px 22px;
+      margin-bottom: 16px;
+    }
+    .header-card h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-align: center;
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+    .site-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .site-row .site-field { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; }
+    .site-row .site-note { font-size: 0.8rem; color: #888; }
+    .uf-input {
+      border: none;
+      border-bottom: 1.5px solid #bbb;
+      padding: 4px 6px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      background: transparent;
+      outline: none;
+      transition: border-color .2s;
+      width: 160px;
+    }
+    .uf-input:focus { border-bottom-color: #8e44ad; }
+    .uf-input.sm { width: 60px; }
+    .uf-input.md { width: 100px; }
+    .uf-input.lg { width: 200px; }
+    .uf-input.xl { width: 100%; }
+
+    /* Section card */
+    .section-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .section-title {
+      background: #8e44ad;
+      color: #fff;
+      padding: 11px 20px;
+      font-size: 0.97rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .section-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+
+    /* Inline form row */
+    .form-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      font-size: 0.93rem;
+    }
+    .form-row label { font-weight: 600; white-space: nowrap; }
+
+    /* Checkbox / Radio group */
+    .check-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      font-size: 0.92rem;
+      align-items: center;
+    }
+    .check-group.col { flex-direction: column; gap: 8px; }
+    .cb-item, .rb-item {
+      display: flex; align-items: center; gap: 6px; cursor: pointer;
+    }
+    .cb-item input[type="checkbox"],
+    .rb-item input[type="radio"] {
+      width: 16px; height: 16px;
+      accent-color: #8e44ad;
+      cursor: pointer; flex-shrink: 0;
+    }
+
+    /* Sub-block (indented) */
+    .sub-block {
+      border-left: 3px solid #e8d5f5;
+      padding-left: 14px;
+      margin-left: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sub-block.hidden { display: none; }
+
+    /* Divider */
+    .divider { height: 1px; background: #f0e8f8; }
+
+    /* Date group */
+    .date-group { display: flex; align-items: center; gap: 5px; font-size: 0.93rem; flex-wrap: wrap; }
+    .date-group input { width: 58px; text-align: center; }
+    .date-group input.y { width: 68px; }
+
+    /* Number input */
+    input[type="number"] {
+      border: none;
+      border-bottom: 1.5px solid #bbb;
+      padding: 4px 4px;
+      font-size: 0.93rem;
+      font-family: inherit;
+      background: transparent;
+      outline: none;
+      width: 50px;
+      text-align: center;
+      transition: border-color .2s;
+    }
+    input[type="number"]:focus { border-bottom-color: #8e44ad; }
+
+    /* Textarea */
+    textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.92rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    textarea:focus { border-color: #8e44ad; }
+
+    /* Label subtle */
+    .field-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    /* Bottom sign row */
+    .sign-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 520px) { .sign-row { grid-template-columns: 1fr; } }
+    .sign-box {
+      border: 1px solid #e0d0ee;
+      border-radius: 8px;
+      padding: 14px 16px;
+      background: #fdf8ff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 0.92rem;
+    }
+    .sign-box .sign-title { font-weight: 700; color: #8e44ad; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+    .btn-submit {
+      background: #8e44ad; color: #fff; border: none;
+      border-radius: 8px; padding: 13px 40px;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: background .2s;
+    }
+    .btn-submit:hover { background: #6c3483; }
+    .btn-clear {
+      background: transparent; color: #8e44ad;
+      border: 2px solid #8e44ad; border-radius: 8px;
+      padding: 11px 28px; font-size: 1rem;
+      cursor: pointer; font-family: inherit; transition: background .2s;
+    }
+    .btn-clear:hover { background: #f5eeff; }
+
+    /* Send status */
+    .send-status {
+      text-align: center; padding: 10px; font-size: 0.88rem;
+      border-radius: 8px; margin-top: 10px; display: none;
+    }
+    .send-status.ok { background: #e6f4ea; color: #2e7d32; }
+    .send-status.err { background: #fce4ec; color: #b71c1c; }
+    .send-status.sending { background: #e3f2fd; color: #1565c0; }
+
+    /* Success */
+    #successMsg {
+      display: none; background: #f3e8ff; border: 1px solid #c39bd3;
+      border-radius: 10px; padding: 28px; text-align: center;
+      color: #6c3483; font-size: 1.05rem; margin-top: 20px;
+    }
+    #successMsg h2 { font-size: 1.4rem; margin-bottom: 8px; }
+
+    /* Inline text */
+    .inline { display: inline; }
+    .text-hint { font-size: 0.8rem; color: #999; margin-left: 4px; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header-card">
+    <h1>建昇科技有限公司<br><span style="font-size:1.2rem;">妊娠及分娩後未滿一年員工之健康情形自我評估表</span></h1>
+    <div class="site-row">
+      <div class="site-field">
+        <label>站名：</label>
+        <input type="text" class="uf-input md" id="site" placeholder="請輸入">
+      </div>
+      <span class="site-note">（員工本人填寫，可參閱孕婦健康手冊）</span>
+    </div>
+  </div>
+
+  <form id="mainForm" novalidate>
+
+    <!-- 一、基本資料 -->
+    <div class="section-card">
+      <div class="section-title">一、基本資料</div>
+      <div class="section-body">
+
+        <!-- 姓名/年齡/職務/班別 -->
+        <div class="form-row">
+          <label>姓名：</label><input type="text" class="uf-input md" id="uname" placeholder="請輸入" required>
+          <label>年齡：</label><input type="number" id="age" min="15" max="60" style="width:50px"> 歲
+          <label>職務：</label><input type="text" class="uf-input md" id="job" placeholder="請輸入">
+          <label>目前班別：</label><input type="text" class="uf-input sm" id="shift" placeholder="請輸入">
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 狀態：妊娠 / 分娩後 -->
+        <div>
+          <div class="check-group">
+            <label class="rb-item"><input type="radio" name="status" value="妊娠" id="statusPreg"> 妊娠</label>
+            <label class="rb-item"><input type="radio" name="status" value="分娩後" id="statusPost"> 分娩後</label>
+          </div>
+
+          <!-- 妊娠詳細 -->
+          <div class="sub-block hidden" id="pregBlock" style="margin-top:10px">
+            <div class="form-row">
+              <label>妊娠週數：</label>
+              <input type="number" id="pregWeeks" min="1" max="42" style="width:50px"> 週
+              <label style="margin-left:12px">預產期：</label>
+              <div class="date-group">
+                <input type="number" class="y uf-input" id="dueY" placeholder="年" min="2024" max="2030">年
+                <input type="number" class="uf-input sm" id="dueM" placeholder="月" min="1" max="12">月
+                <input type="number" class="uf-input sm" id="dueD" placeholder="日" min="1" max="31">日
+              </div>
+            </div>
+            <div class="form-row">
+              <label>本次妊娠有無多胎：</label>
+              <label class="rb-item"><input type="radio" name="multiPre" value="無"> 無</label>
+              <label class="rb-item"><input type="radio" name="multiPre" value="有"> 有</label>
+            </div>
+          </div>
+
+          <!-- 分娩後詳細 -->
+          <div class="sub-block hidden" id="postBlock" style="margin-top:10px">
+            <div class="form-row">
+              <label>分娩日期：</label>
+              <div class="date-group">
+                <input type="number" class="y uf-input" id="birthY" placeholder="年" min="2024" max="2030">年
+                <input type="number" class="uf-input sm" id="birthM" placeholder="月" min="1" max="12">月
+                <input type="number" class="uf-input sm" id="birthD" placeholder="日" min="1" max="31">日
+              </div>
+              <label style="margin-left:12px">哺乳：</label>
+              <label class="rb-item"><input type="radio" name="breastfeed" value="哺乳"> 哺乳</label>
+              <label class="rb-item"><input type="radio" name="breastfeed" value="未哺乳"> 未哺乳</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 二、過去疾病史 -->
+    <div class="section-card">
+      <div class="section-title">二、過去疾病史</div>
+      <div class="section-body">
+        <div class="check-group">
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="無"> 無</label>
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="氣喘"> 氣喘</label>
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="高血壓"> 高血壓</label>
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="糖尿病"> 糖尿病</label>
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="心血管疾病"> 心血管疾病</label>
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="蠶豆症"> 蠶豆症</label>
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="腎臟或泌尿統疾病"> 腎臟或泌尿統疾病</label>
+        </div>
+        <div class="form-row">
+          <label class="cb-item"><input type="checkbox" name="pastDisease" value="其他"> 其他：</label>
+          <input type="text" class="uf-input lg" id="pastDiseaseOther" placeholder="請說明">
+        </div>
+      </div>
+    </div>
+
+    <!-- 三、家族病史 -->
+    <div class="section-card">
+      <div class="section-title">三、家族病史</div>
+      <div class="section-body">
+        <div class="check-group">
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="無"> 無</label>
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="氣喘"> 氣喘</label>
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="高血壓"> 高血壓</label>
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="糖尿病"> 糖尿病</label>
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="心血管疾病"> 心血管疾病</label>
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="蠶豆症"> 蠶豆症</label>
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="腎臟或泌尿統疾病"> 腎臟或泌尿統疾病</label>
+        </div>
+        <div class="form-row">
+          <label class="cb-item"><input type="checkbox" name="familyDisease" value="其他"> 其他：</label>
+          <input type="text" class="uf-input lg" id="familyDiseaseOther" placeholder="請說明">
+        </div>
+      </div>
+    </div>
+
+    <!-- 四、婦產科相關病史 -->
+    <div class="section-card">
+      <div class="section-title">四、婦產科相關病史</div>
+      <div class="section-body">
+
+        <!-- 1. 免疫狀況 -->
+        <div>
+          <div class="field-label">1. 免疫狀況（曾接受疫苗注射或具有抗體）</div>
+          <div class="check-group">
+            <label class="cb-item"><input type="checkbox" name="immunity" value="B型肝炎"> B型肝炎</label>
+            <label class="cb-item"><input type="checkbox" name="immunity" value="水痘"> 水痘</label>
+            <label class="cb-item"><input type="checkbox" name="immunity" value="MMR(痲疹–腮腺炎–德國麻疹)"> MMR（痲疹–腮腺炎–德國麻疹）</label>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 2. 生產史 -->
+        <div>
+          <div class="field-label">2. 生產史</div>
+          <div class="form-row">
+            懷孕次數：<input type="number" id="pregCount" min="0" max="20"> 次，
+            生產次數：<input type="number" id="birthCount" min="0" max="20"> 次，
+            流產次數：<input type="number" id="misCount" min="0" max="20"> 次
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 3. 生產方式 -->
+        <div>
+          <div class="field-label">3. 生產方式
+            <label class="cb-item" style="display:inline-flex;margin-left:12px">
+              <input type="checkbox" id="firstBabyDeliv"> 第一胎免填
+            </label>
+          </div>
+          <div id="delivBlock" class="sub-block" style="margin-top:8px">
+            <div class="form-row">
+              自然產：<input type="number" id="naturalBirth" min="0" max="20"> 次，
+              剖腹產：<input type="number" id="caesarean" min="0" max="20"> 次
+            </div>
+            <div class="form-row">
+              <label>併發症：</label>
+              <label class="rb-item"><input type="radio" name="complication" value="否"> 否</label>
+              <label class="rb-item"><input type="radio" name="complication" value="是" id="compYes"> 是：</label>
+              <input type="text" class="uf-input lg" id="complicationDetail" placeholder="請說明">
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 4. 過去懷孕病史 -->
+        <div>
+          <div class="field-label">4. 過去懷孕病史
+            <label class="cb-item" style="display:inline-flex;margin-left:12px">
+              <input type="checkbox" id="firstBabyHist"> 第一胎免填
+            </label>
+          </div>
+          <div id="histBlock" class="sub-block" style="margin-top:8px">
+            <div class="check-group">
+              <label class="cb-item"><input type="checkbox" name="pregHistory" value="無"> 無</label>
+              <label class="cb-item"><input type="checkbox" name="pregHistory" value="先天性子宮異常"> 先天性子宮異常</label>
+              <label class="cb-item"><input type="checkbox" name="pregHistory" value="子宮肌瘤"> 子宮肌瘤</label>
+              <label class="cb-item"><input type="checkbox" name="pregHistory" value="子宮頸手術病史"> 子宮頸手術病史</label>
+              <label class="cb-item"><input type="checkbox" name="pregHistory" value="早產史"> 早產（懷孕未滿37週之生產）史</label>
+              <label class="cb-item"><input type="checkbox" name="pregHistory" value="曾有第2孕期以上之流產"> 曾有第2孕期（14週）以上之流產</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- 5. 其他 -->
+        <div>
+          <div class="field-label">5. 其他</div>
+          <textarea id="obOther" placeholder="請輸入其他婦產科相關病史（選填）"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 五、妊娠及分娩後風險因子評估 -->
+    <div class="section-card">
+      <div class="section-title">五、妊娠及分娩後風險因子評估</div>
+      <div class="section-body">
+
+        <div class="check-group">
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="無"> 無</label>
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="沒有規律產檢"> 沒有規律產檢</label>
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="抽菸"> 抽菸</label>
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="喝酒"> 喝酒</label>
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="生活環境因素"> 生活環境因素</label>
+        </div>
+        <div class="form-row">
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="藥物"> 藥物，請敘明：</label>
+          <input type="text" class="uf-input lg" id="riskMedicine" placeholder="請說明">
+        </div>
+        <div class="check-group">
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="年齡未滿18或大於40歲"> 年齡（未滿18歲或大於40歲）</label>
+          <label class="cb-item"><input type="checkbox" name="riskFactor" value="孕前體重未滿45公斤或身高未滿150公分"> 孕前體重未滿45公斤、身高未滿150公分</label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div>
+          <div class="field-label">個人心理狀況</div>
+          <div class="check-group">
+            <label class="cb-item"><input type="checkbox" name="mentalStatus" value="焦慮症"> 焦慮症</label>
+            <label class="cb-item"><input type="checkbox" name="mentalStatus" value="憂鬱症"> 憂鬱症</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="field-label">睡眠</div>
+          <div class="check-group">
+            <label class="rb-item"><input type="radio" name="sleep" value="正常"> 正常</label>
+            <label class="rb-item"><input type="radio" name="sleep" value="失眠"> 失眠</label>
+            <label class="rb-item"><input type="radio" name="sleep" value="需使用藥物"> 需使用藥物</label>
+            <label class="rb-item"><input type="radio" name="sleep" value="其他"> 其他</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 六、自覺徵狀 -->
+    <div class="section-card">
+      <div class="section-title">六、自覺徵狀（妊娠期間填寫）</div>
+      <div class="section-body">
+        <div class="check-group">
+          <label class="cb-item"><input type="checkbox" name="symptom" value="無"> 無</label>
+          <label class="cb-item"><input type="checkbox" name="symptom" value="出血"> 出血</label>
+          <label class="cb-item"><input type="checkbox" name="symptom" value="腹痛"> 腹痛</label>
+          <label class="cb-item"><input type="checkbox" name="symptom" value="痙攣"> 痙攣</label>
+        </div>
+        <div class="form-row">
+          <label>其他症狀：</label>
+          <input type="text" class="uf-input xl" id="symptomOther" placeholder="請說明">
+        </div>
+      </div>
+    </div>
+
+    <!-- 填寫人 / 日期 -->
+    <div class="section-card">
+      <div class="section-title">填寫資訊</div>
+      <div class="section-body">
+        <div class="sign-row">
+          <!-- 妊娠 -->
+          <div class="sign-box">
+            <div class="sign-title">□ 妊娠</div>
+            <div class="form-row">
+              <label>填寫人：</label>
+              <input type="text" class="uf-input md" id="signerPreg" placeholder="姓名">
+            </div>
+            <div class="form-row">
+              <label>填寫日期：</label>
+              <div class="date-group">
+                <input type="number" class="uf-input" id="signPregY" placeholder="年" style="width:68px" min="2024" max="2030">年
+                <input type="number" class="uf-input sm" id="signPregM" placeholder="月" min="1" max="12">月
+                <input type="number" class="uf-input sm" id="signPregD" placeholder="日" min="1" max="31">日
+              </div>
+            </div>
+          </div>
+          <!-- 分娩後 -->
+          <div class="sign-box">
+            <div class="sign-title">分娩後</div>
+            <div class="form-row">
+              <label>填寫人：</label>
+              <input type="text" class="uf-input md" id="signerPost" placeholder="姓名">
+            </div>
+            <div class="form-row">
+              <label>填寫日期：</label>
+              <div class="date-group">
+                <input type="number" class="uf-input" id="signPostY" placeholder="年" style="width:68px" min="2024" max="2030">年
+                <input type="number" class="uf-input sm" id="signPostM" placeholder="月" min="1" max="12">月
+                <input type="number" class="uf-input sm" id="signPostD" placeholder="日" min="1" max="31">日
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button type="submit" class="btn-submit">✔ 送出表單</button>
+      <button type="button" class="btn-clear" onclick="clearAll()">✕ 清除重填</button>
+    </div>
+    <div id="sendStatus" class="send-status"></div>
+
+  </form>
+
+  <div id="successMsg">
+    <h2>✅ 表單已成功送出</h2>
+    <p>感謝您填寫本健康評估表，資料已完成送出。</p>
+  </div>
+
+</div>
+
+<script>
+  // 狀態切換：妊娠 / 分娩後
+  document.querySelectorAll('input[name="status"]').forEach(function(r) {
+    r.addEventListener('change', function() {
+      document.getElementById('pregBlock').classList.toggle('hidden', this.value !== '妊娠');
+      document.getElementById('postBlock').classList.toggle('hidden', this.value !== '分娩後');
+    });
+  });
+
+  // 第一胎免填 toggle
+  document.getElementById('firstBabyDeliv').addEventListener('change', function() {
+    document.getElementById('delivBlock').classList.toggle('hidden', this.checked);
+  });
+  document.getElementById('firstBabyHist').addEventListener('change', function() {
+    document.getElementById('histBlock').classList.toggle('hidden', this.checked);
+  });
+
+  // 收集 checkbox 群組值
+  function getChecked(name) {
+    return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked'))
+      .map(function(el){ return el.value; }).join('、') || '無';
+  }
+  function getRadio(name) {
+    var el = document.querySelector('input[name="'+name+'"]:checked');
+    return el ? el.value : '';
+  }
+
+  // 送出
+  document.getElementById('mainForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (!document.getElementById('site').value.trim()) { alert('請填寫站名'); return; }
+    if (!document.getElementById('uname').value.trim()) { alert('請填寫姓名'); return; }
+
+    var payload = {
+      site: document.getElementById('site').value.trim(),
+      name: document.getElementById('uname').value.trim(),
+      age: document.getElementById('age').value,
+      job: document.getElementById('job').value,
+      shift: document.getElementById('shift').value,
+      status: getRadio('status'),
+      pregWeeks: document.getElementById('pregWeeks').value,
+      dueDate: document.getElementById('dueY').value + '/' + document.getElementById('dueM').value + '/' + document.getElementById('dueD').value,
+      multiPre: getRadio('multiPre'),
+      birthDate: document.getElementById('birthY').value + '/' + document.getElementById('birthM').value + '/' + document.getElementById('birthD').value,
+      breastfeed: getRadio('breastfeed'),
+      pastDisease: getChecked('pastDisease') + (document.getElementById('pastDiseaseOther').value ? '(' + document.getElementById('pastDiseaseOther').value + ')' : ''),
+      familyDisease: getChecked('familyDisease') + (document.getElementById('familyDiseaseOther').value ? '(' + document.getElementById('familyDiseaseOther').value + ')' : ''),
+      immunity: getChecked('immunity'),
+      pregCount: document.getElementById('pregCount').value,
+      birthCount: document.getElementById('birthCount').value,
+      misCount: document.getElementById('misCount').value,
+      naturalBirth: document.getElementById('naturalBirth').value,
+      caesarean: document.getElementById('caesarean').value,
+      complication: getRadio('complication') + (document.getElementById('complicationDetail').value ? ':' + document.getElementById('complicationDetail').value : ''),
+      pregHistory: getChecked('pregHistory'),
+      obOther: document.getElementById('obOther').value,
+      riskFactor: getChecked('riskFactor') + (document.getElementById('riskMedicine').value ? '(藥物:' + document.getElementById('riskMedicine').value + ')' : ''),
+      mentalStatus: getChecked('mentalStatus'),
+      sleep: getRadio('sleep'),
+      symptom: getChecked('symptom') + (document.getElementById('symptomOther').value ? '(' + document.getElementById('symptomOther').value + ')' : ''),
+      signerPreg: document.getElementById('signerPreg').value,
+      signDatePreg: document.getElementById('signPregY').value + '/' + document.getElementById('signPregM').value + '/' + document.getElementById('signPregD').value,
+      signerPost: document.getElementById('signerPost').value,
+      signDatePost: document.getElementById('signPostY').value + '/' + document.getElementById('signPostM').value + '/' + document.getElementById('signPostD').value,
+      submitTime: new Date().toLocaleString('zh-TW')
+    };
+
+    var SHEET_URL = 'https://script.google.com/macros/s/AKfycbwrqtJdVGtPLgUGx1nwmNUMGWHJF-Pu1ZCOos07r-3zU3i5Zu9i7XEFw9UgAiTOO1f5Cw/exec';
+
+    var statusEl = document.getElementById('sendStatus');
+    statusEl.style.display = 'block';
+    statusEl.className = 'send-status sending';
+    statusEl.textContent = '⏳ 資料傳送中...';
+
+    var formData = new URLSearchParams();
+    Object.keys(payload).forEach(function(key) { formData.append(key, payload[key]); });
+
+    fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: formData })
+      .then(function() {
+        statusEl.className = 'send-status ok';
+        statusEl.textContent = '✅ 資料已成功寫入 Google Sheets！';
+        document.getElementById('mainForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(function(err) {
+        statusEl.className = 'send-status err';
+        statusEl.textContent = '⚠️ 傳送失敗，請通知管理員。';
+      });
+  });
+
+  function clearAll() {
+    if (confirm('確定清除所有填答內容？')) {
+      document.getElementById('mainForm').reset();
+      document.getElementById('pregBlock').classList.add('hidden');
+      document.getElementById('postBlock').classList.add('hidden');
+      document.getElementById('delivBlock').classList.remove('hidden');
+      document.getElementById('histBlock').classList.remove('hidden');
+      document.getElementById('sendStatus').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+</script>
+</body>
+</html>
