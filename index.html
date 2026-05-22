@@ -602,8 +602,6 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
   // 第一胎免填 toggle
   document.getElementById('firstBabyDeliv').addEventListener('change', function() {
@@ -669,65 +667,25 @@
     var statusEl = document.getElementById('sendStatus');
     statusEl.style.display = 'block';
     statusEl.className = 'send-status sending';
-    statusEl.textContent = '⏳ 正在產生 PDF...';
+    statusEl.textContent = '⏳ 資料傳送中，PDF 雲端產生中...';
 
-    // 確認函式庫是否載入
-    if (typeof html2canvas === 'undefined') {
-      statusEl.className = 'send-status err';
-      statusEl.textContent = '⚠️ 錯誤：html2canvas 未載入，請確認網路連線後重試。';
-      return;
-    }
-    if (typeof window.jspdf === 'undefined') {
-      statusEl.className = 'send-status err';
-      statusEl.textContent = '⚠️ 錯誤：jsPDF 未載入，請確認網路連線後重試。';
-      return;
-    }
+    // 傳送文字資料，由 Apps Script 在雲端產生 PDF
+    payload.type = 'pdf_doc';
+    var formData = new URLSearchParams();
+    Object.keys(payload).forEach(function(key) { formData.append(key, payload[key]); });
 
-    html2canvas(document.getElementById('mainForm'), {
-      scale: 1, useCORS: true, allowTaint: true, backgroundColor: '#f5f0f7'
-    }).then(function(canvas) {
-      statusEl.textContent = '⏳ 資料與 PDF 傳送中...';
-
-      // 產生 PDF（多頁支援）
-      var imgData = canvas.toDataURL('image/jpeg', 0.85);
-      var pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
-      var pW = pdf.internal.pageSize.getWidth();
-      var pH = pdf.internal.pageSize.getHeight();
-      var margin = 8;
-      var iW = pW - margin * 2;
-      var iH = canvas.height * iW / canvas.width;
-      var remaining = iH;
-      pdf.addImage(imgData, 'JPEG', margin, margin, iW, iH);
-      remaining -= (pH - margin * 2);
-      while (remaining > 0) {
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', margin, margin - (iH - remaining), iW, iH);
-        remaining -= (pH - margin * 2);
-      }
-
-      var pdfBase64 = pdf.output('datauristring').split(',')[1];
-      var today = new Date().toLocaleDateString('zh-TW').replace(/\//g, '-');
-      var fname = '妊娠分娩評估_' + (payload.name || '未填') + '_' + today + '.pdf';
-
-      // 僅傳送 PDF 到 Google Drive
-      var pdfForm = new URLSearchParams();
-      pdfForm.append('type', 'pdf');
-      pdfForm.append('fileName', fname);
-      pdfForm.append('pdfData', pdfBase64);
-
-      return fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: pdfForm });
-    })
-    .then(function() {
-      statusEl.className = 'send-status ok';
-      statusEl.textContent = '✅ PDF 已成功上傳至 Google Drive！';
-      document.getElementById('mainForm').style.display = 'none';
-      document.getElementById('successMsg').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    })
-    .catch(function(err) {
-      statusEl.className = 'send-status err';
-      statusEl.textContent = '⚠️ 錯誤：' + (err.message || err);
-    });
+    fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: formData })
+      .then(function() {
+        statusEl.className = 'send-status ok';
+        statusEl.textContent = '✅ 資料已送出！PDF 約 30 秒後出現於 Google Drive「問卷表單PDF」資料夾。';
+        document.getElementById('mainForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(function(err) {
+        statusEl.className = 'send-status err';
+        statusEl.textContent = '⚠️ 傳送失敗，請通知管理員。';
+      });
   });
 
   function clearAll() {
